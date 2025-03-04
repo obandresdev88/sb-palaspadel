@@ -1,6 +1,7 @@
 package com.palaspadel.sb_palaspadel.repositories;
 
 import com.palaspadel.sb_palaspadel.entities.Rev;
+import com.palaspadel.sb_palaspadel.entities.Usu;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -13,6 +14,6 @@ import java.util.List;
  * @version 1.0
  */
 public interface RevRepository extends JpaRepository<Rev, Integer> {
-    List<Rev> findByRevUsu (String usuariorev);
+    List<Rev> findByRevusu (Usu revusu);
 
 }

@@ -3,6 +3,7 @@ package com.palaspadel.sb_palaspadel.repositories;
 import com.palaspadel.sb_palaspadel.entities.Pal;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -13,9 +14,9 @@ import java.util.List;
  * @version 1.0
  */
 public interface PalRepository extends JpaRepository<Pal, Integer> {
-    List<Pal> findByPalpes (String palpes);
+    List<Pal> findByPalpes (Integer palpes );
     List<Pal> findByPalfor(String palfor);
     List<Pal> findByPaldur(String paldur);
     List<Pal> findByPalbal (String palbal);
-    List<Pal> findByPalpre (String palpre);
+    List<Pal> findByPalpre (BigDecimal palpre);
 }

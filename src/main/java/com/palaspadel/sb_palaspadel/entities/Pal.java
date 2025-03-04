@@ -30,8 +30,8 @@ public class Pal {
     private FormaPala palfor = FormaPala.REDONDA;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "paldureza", nullable = false)
-    private DurezaPala paldureza = DurezaPala.MEDIA;
+    @Column(name = "paldur", nullable = false)
+    private DurezaPala paldur = DurezaPala.MEDIA;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "palbal", nullable = false)
