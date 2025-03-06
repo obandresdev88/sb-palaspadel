@@ -1,16 +1,18 @@
 package com.palaspadel.sb_palaspadel.controllers;
 
 import com.palaspadel.sb_palaspadel.entities.Usu;
+import com.palaspadel.sb_palaspadel.repositories.UsuRepository;
 import com.palaspadel.sb_palaspadel.services.UsuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * Description:
+ * Description: Clase controladora de la entidad Usu.
+ * Se encarga de recibir las peticiones a través de mapping y llamar a la capa de negocio (servicio) correspondiente
  * <p>
  * Created by Andres on 2025
  *
@@ -23,8 +25,28 @@ public class UsuController {
     @Autowired
     private UsuService usuService;
 
+    /**
+     * Metodo para listar todos los usuarios llamando al servicio o capa de negocio (impl)
+     * @return
+     */
     @GetMapping
     public List<Usu> listarUsuarios() {
         return usuService.findAll();
+    }
+
+    /**
+     * Metodo para crear un usuario llamando al servicio o capa de negocio (impl)
+     *
+     * @param usu
+     * @return
+     */
+    @CrossOrigin(origins = "http://127.0.0.1:5500") // Para permitir peticiones desde cualquier origen
+    @PostMapping("/registro")
+    public ResponseEntity<Usu> crearUsuario( @RequestBody Usu usu) { // Se pone body porque no vendrá por path variable, se rellena en el formulario
+        Usu usuSaved  = usuService.save(usu);
+        if (usuSaved == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuSaved);
     }
 }

@@ -28,14 +28,18 @@ public class Usu {
     @Column(name = "usufec", updatable = false)
     private Instant usufec;
 
-    @ManyToOne
-    @JoinColumn(name = "usuniv", referencedColumnName = "nivid")
-    private Niv nivel; // Relación con la entidad Niv
+    @Enumerated(EnumType.STRING)
+    @Column(name = "usuniv", nullable = false)
+    private Usu.UsuNivel usuniv = Usu.UsuNivel.INTERMEDIO;
 
     @PrePersist
     protected void onCreate() {
         if (usufec == null) {
             usufec = Instant.now();
         }
+    }
+
+    public enum UsuNivel {
+        PRINCIPIANTE, INTERMEDIO, AVANZADO, PRO
     }
 }
