@@ -1,4 +1,5 @@
 -- Desactivar restricciones de clave foránea para evitar errores al eliminar tablas
+
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Eliminar la base de datos si ya existe
@@ -10,30 +11,27 @@ USE recomendador_palas;
 
 -- Tabla de Usuarios
 CREATE TABLE usu (
-                     usuid INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Identificador único del usuario',
+                     usuid INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Id del usuario',
                      usunom VARCHAR(75) NOT NULL DEFAULT '' COMMENT 'Nombre del usuario',
-                     usuema VARCHAR(255) NOT NULL UNIQUE COMMENT 'Correo electrónico único del usuario',
+                     usuema VARCHAR(255) NOT NULL UNIQUE COMMENT 'Mail único del usuario',
                      usupas VARCHAR(255) NOT NULL COMMENT 'Contraseña encriptada del usuario',
                      usufec TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de registro del usuario',
-                     usuniv INT COMMENT 'Nivel del usuario (relación con niv.nivid)'
+                     usuniv ENUM('PRINCIPIANTE', 'INTERMEDIO', 'AVANZADO', 'PRO') NOT NULL DEFAULT 'PRINCIPIANTE' COMMENT 'Nivel del usuario'
 ) COMMENT='Usuarios registrados en el sistema';
-
--- Tabla de Niveles de jugador
-CREATE TABLE niv (
-                     nivid INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Identificador único del nivel',
-                     nivnom ENUM('Principiante', 'Intermedio', 'Avanzado', 'Pro') NOT NULL DEFAULT 'Principiante' COMMENT 'Nombre del nivel',
-                     nivdes TEXT COMMENT 'Descripción del nivel de juego',
-                     nivfec TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación/modificación del nivel'
-) COMMENT='Niveles de habilidad de los jugadores';
 
 -- Tabla de Permisos/Roles de usuario
 CREATE TABLE usg (
-                     usgid INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Identificador único del permiso',
+                     usgid INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Id del permiso',
                      usgnom VARCHAR(50) NOT NULL DEFAULT '' COMMENT 'Nombre del rol (ADMIN, USER, etc.)',
                      usgdes TEXT COMMENT 'Descripción del permiso/rol',
                      usgfec TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación del permiso',
                      usgact BOOLEAN DEFAULT 1 COMMENT 'Estado del permiso (1=Activo, 0=Inactivo)'
 ) COMMENT='Roles o permisos que pueden tener los usuarios';
+
+-- Insertar roles por defecto
+INSERT INTO usg (usgnom, usgdes) VALUES
+                                     ('ADMIN', 'Administrador con acceso total al sistema'),
+                                     ('USER', 'Usuario registrado con permisos básicos');
 
 -- Tabla intermedia Usuarios - Permisos (Relación muchos a muchos)
 CREATE TABLE usu_usg (
@@ -47,20 +45,20 @@ CREATE TABLE usu_usg (
 
 -- Tabla de Palas de pádel
 CREATE TABLE pal (
-                     palid INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Identificador único de la pala',
+                     palid INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Id de la pala',
                      palmar VARCHAR(50) NOT NULL DEFAULT '' COMMENT 'Marca de la pala',
-                     palmod VARCHAR(75) NOT NULL DEFAULT '' COMMENT 'Modelo específico de la pala',
+                     palmod VARCHAR(75) NOT NULL DEFAULT '' COMMENT 'Modelo de la pala',
                      palpes INT NOT NULL DEFAULT 0 COMMENT 'Peso de la pala en gramos',
-                     palfor ENUM('redonda', 'lágrima', 'diamante') NOT NULL DEFAULT 'redonda' COMMENT 'Forma de la pala',
-                     paldur ENUM('blanda', 'media', 'media-dura', 'dura') NOT NULL DEFAULT 'media' COMMENT 'Dureza de la pala',
-                     palbal ENUM('alto', 'medio', 'bajo') NOT NULL DEFAULT 'medio' COMMENT 'Balance de la pala',
+                     palfor ENUM('REDONDA', 'LAGRIMA', 'DIAMANTE') NOT NULL DEFAULT 'REDONDA' COMMENT 'Forma de la pala',
+                     paldur ENUM('BLANDA', 'MEDIA', 'MEDIA-DURA', 'DURA') NOT NULL DEFAULT 'MEDIA' COMMENT 'Dureza de la pala',
+                     palbal ENUM('ALTO', 'MEDIO', 'BAJO') NOT NULL DEFAULT 'MEDIO' COMMENT 'Balance de la pala',
                      palpre DECIMAL(10,2) NOT NULL DEFAULT 0.00 COMMENT 'Precio de la pala en euros',
                      palurl VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'Enlace de compra de la pala'
 ) COMMENT='Palas de pádel disponibles en la plataforma';
 
 -- Tabla de Reseñas de palas
 CREATE TABLE rev (
-                     revid INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Identificador único de la reseña',
+                     revid INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Id de la reseña',
                      revusu INT COMMENT 'Usuario que hizo la reseña',
                      revpal INT COMMENT 'Pala reseñada',
                      revval TINYINT UNSIGNED NOT NULL DEFAULT 3 COMMENT 'Valoración del usuario (0-5)',
