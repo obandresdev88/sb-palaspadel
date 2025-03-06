@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Description:
+ * Description: Clase controladora de la entidad Usu.
+ * Se encarga de recibir las peticiones a través de mapping y llamar a la capa de negocio (servicio) correspondiente
  * <p>
  * Created by Andres on 2025
  *
@@ -24,6 +25,10 @@ public class UsuController {
     @Autowired
     private UsuService usuService;
 
+    /**
+     * Metodo para listar todos los usuarios llamando al servicio o capa de negocio (impl)
+     * @return
+     */
     @GetMapping
     public List<Usu> listarUsuarios() {
         return usuService.findAll();
