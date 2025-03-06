@@ -50,7 +50,7 @@ CREATE TABLE pal (
                      palmod VARCHAR(75) NOT NULL DEFAULT '' COMMENT 'Modelo de la pala',
                      palpes INT NOT NULL DEFAULT 0 COMMENT 'Peso de la pala en gramos',
                      palfor ENUM('REDONDA', 'LAGRIMA', 'DIAMANTE') NOT NULL DEFAULT 'REDONDA' COMMENT 'Forma de la pala',
-                     paldur ENUM('BLANDA', 'MEDIA', 'MEDIA-DURA', 'DURA') NOT NULL DEFAULT 'MEDIA' COMMENT 'Dureza de la pala',
+                     paldur ENUM('BLANDA', 'MEDIA', 'MEDIA_DURA', 'DURA') NOT NULL DEFAULT 'MEDIA' COMMENT 'Dureza de la pala',
                      palbal ENUM('ALTO', 'MEDIO', 'BAJO') NOT NULL DEFAULT 'MEDIO' COMMENT 'Balance de la pala',
                      palpre DECIMAL(10,2) NOT NULL DEFAULT 0.00 COMMENT 'Precio de la pala en euros',
                      palurl VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'Enlace de compra de la pala'
