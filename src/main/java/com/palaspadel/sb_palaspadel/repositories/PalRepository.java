@@ -7,8 +7,12 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface PalRepository extends JpaRepository<Pal, Integer> {
+
+    Optional<Pal> findByPalmarAndPalmod(String palmar, String palmod);
+
 
     @Query("SELECT p FROM Pal p WHERE p.palbal = :palbal AND p.palfor = :palfor AND p.paldur = :paldur AND p.palpre <= :palpre")
     List<Pal> findMatchingPals(@Param("palbal") Pal.BalancePala palbal,
