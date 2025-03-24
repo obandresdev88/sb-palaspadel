@@ -3,7 +3,10 @@ package com.palaspadel.sb_palaspadel.controllers;
 import com.palaspadel.sb_palaspadel.entities.Pal;
 import com.palaspadel.sb_palaspadel.services.PalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,4 +34,18 @@ public class PalControler {
         return palService.agregarPala(pala);
     }
 
+
+    @PostMapping("/importar")
+    public ResponseEntity<String> importarPalas(@RequestParam("archivoExcel") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Por favor, sube un archivo válido.");
+        }
+
+        try {
+            palService.importarPalasDesdeExcel(file);
+            return ResponseEntity.ok("Número de palas importadas: " + palService.palasImportadas.size());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al importar el archivo: " + e.getMessage());
+        }
+    }
 }

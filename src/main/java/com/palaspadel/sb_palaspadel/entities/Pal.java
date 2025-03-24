@@ -60,7 +60,7 @@ public class Pal {
     }
 
     public enum DurezaPala {
-        BLANDA, MEDIA, DURA
+        BLANDA, MEDIA, MEDIA_DURA, DURA
     }
 
     public enum BalancePala {
