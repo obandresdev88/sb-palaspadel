@@ -5,6 +5,7 @@ import com.palaspadel.sb_palaspadel.dto.RegistroRequestDto;
 import com.palaspadel.sb_palaspadel.entities.Usu;
 import com.palaspadel.sb_palaspadel.exceptions.RecursoYaExisteException;
 import com.palaspadel.sb_palaspadel.repositories.UsuRepository;
+import com.palaspadel.sb_palaspadel.security.JwtUtil;
 import com.palaspadel.sb_palaspadel.services.UsuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,9 @@ import java.util.List;
 public class UsuServiceImpl implements UsuService {
     private final UsuRepository usuRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final JwtUtil jwtUtil;
+
 
     @Transactional
     public AutenticacionResponseDto registrar(RegistroRequestDto request) {
@@ -43,12 +47,19 @@ public class UsuServiceImpl implements UsuService {
         // Guardar en BD
         Usu usuarioGuardado = usuRepository.save(usuario);
 
+/* LO COMENTO PORQUE AHORA USAREMOS JWT PARA LA AUTENTICACION
         // Retornar respuesta (token mock por ahora)
         return new AutenticacionResponseDto(
                 "TOKEN_MOCK",
                 usuarioGuardado.getUsuema(),
                 usuarioGuardado.getId()
-        );
+        );*/
+        String token = jwtUtil.generateToken(
+                usuarioGuardado.getId().longValue(),
+                usuarioGuardado.getUsuniv().name(),
+                request.isPermaneceLogged());
+
+        return new AutenticacionResponseDto(token, usuarioGuardado.getUsuema(), usuarioGuardado.getId());
     }
 
     @Override
