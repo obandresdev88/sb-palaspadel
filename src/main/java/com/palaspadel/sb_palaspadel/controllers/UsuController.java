@@ -34,19 +34,5 @@ public class UsuController {
         return usuService.findAll();
     }
 
-    /**
-     * Metodo para crear un usuario llamando al servicio o capa de negocio (impl)
-     *
-     * @param usu
-     * @return
-     */
-    @CrossOrigin(origins = "http://127.0.0.1:5500") // Para permitir peticiones desde cualquier origen
-    @PostMapping("/registro")
-    public ResponseEntity<Usu> crearUsuario( @RequestBody Usu usu) { // Se pone body porque no vendrá por path variable, se rellena en el formulario
-        Usu usuSaved  = usuService.save(usu);
-        if (usuSaved == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuSaved);
-    }
+
 }

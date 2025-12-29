@@ -13,7 +13,6 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface UsuRepository extends JpaRepository<Usu, Integer> {
-    Optional<Usu> findByUsuema(String usuema);
 
-    Optional<Usu> findByUsunom(String usunom);
+    boolean existsByUsuema(String usuema);
 }
