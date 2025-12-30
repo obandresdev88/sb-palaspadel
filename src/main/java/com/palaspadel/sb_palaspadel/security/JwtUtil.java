@@ -1,6 +1,7 @@
 
 package com.palaspadel.sb_palaspadel.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -37,6 +38,13 @@ public class JwtUtil {
         this.longExpirationMillis = Duration.ofSeconds(longExpirationSeconds).toMillis();
     }
 
+    /**
+     * Genera un token JWT con los claims proporcionados y la configuración de expiración.
+     * @param id
+     * @param nivel
+     * @param stayLogged
+     * @return
+     */
     public String generateToken(Long id, String nivel, boolean stayLogged) {
         long now = System.currentTimeMillis();
         long expMillis = now + (stayLogged ? longExpirationMillis : shortExpirationMillis);
@@ -54,5 +62,34 @@ public class JwtUtil {
                 .setExpiration(expiration)
                 .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    /**
+     * Parsea el token JWT y retorna los claims (reclamaciones) contenidos en él.
+     *
+     * @param token el token JWT a parsear
+     * @return los claims contenidos en el token
+     */
+    public Claims parseClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(signingKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    /**
+     * Valida el token JWT verificando su firma y expiración.
+     *
+     * @param token el token JWT a validar
+     * @return true si el token es válido, false en caso contrario
+     */
+    public boolean isValid(String token) {
+        try {
+            parseClaims(token);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 }
