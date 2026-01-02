@@ -3,16 +3,21 @@ package com.palaspadel.sb_palaspadel.controllers;
 import com.palaspadel.sb_palaspadel.dto.AutenticacionResponseDto;
 import com.palaspadel.sb_palaspadel.dto.LoginRequestDto;
 import com.palaspadel.sb_palaspadel.dto.RegistroRequestDto;
+import com.palaspadel.sb_palaspadel.entities.Usg;
 import com.palaspadel.sb_palaspadel.entities.Usu;
+import com.palaspadel.sb_palaspadel.entities.UsuUsg;
 import com.palaspadel.sb_palaspadel.repositories.UsuRepository;
+import com.palaspadel.sb_palaspadel.repositories.UsuUsgRepository;
 import com.palaspadel.sb_palaspadel.security.JwtUtil;
 import com.palaspadel.sb_palaspadel.services.UsuService;
+import com.palaspadel.sb_palaspadel.services.UsuUsgService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,7 +27,8 @@ public class AutenticacionController {
 
     private final UsuService usuService;
 
-    private final UsuRepository usuRepository;
+    private final UsuUsgService usuUsgService;
+
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
@@ -34,7 +40,7 @@ public class AutenticacionController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto request) {
-        Optional<Usu> optUsu = usuRepository.findByUsuema(request.getUsuema());
+        Optional<Usu> optUsu = usuService.obtenerUsuarioPorEmail(request.getUsuema());
         // Verificar si el email existe en la base de datos
         if (optUsu.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
@@ -44,10 +50,15 @@ public class AutenticacionController {
         if (!passwordEncoder.matches(request.getUsupas(), usu.getUsupas())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         }
+        // Ver que rol o permisos tiene el usuario para incluirlo en el token JWT
+        List<UsuUsg> usuUsgs  = usuUsgService.obtenerRolesPorUsuario(usu);
 
         String token = jwtUtil.generateToken(
                 usu.getId().longValue(),
                 usu.getUsuniv() != null ? usu.getUsuniv().name() : "INTERMEDIO",
+                usuUsgs.stream()
+                        .map(uu -> uu.getPermiso().getUsgnom())
+                        .toList(),
                 request.isPermaneceLogged()
         );
 

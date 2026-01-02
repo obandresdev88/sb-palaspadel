@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -55,22 +56,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = authHeader.substring(7);
         try {
-            if (SecurityContextHolder.getContext().getAuthentication() == null && jwtUtil.isValid(token)) {
-                Claims claims = jwtUtil.parseClaims(token);
-                Long id = claims.get("id", Number.class).longValue();
-                String nivel = claims.get("nivel", String.class);
+            if (SecurityContextHolder.getContext().getAuthentication() != null || !jwtUtil.isValid(token)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-                Optional<Usu> optUsu = usuRepository.findById(id.intValue());
-                if (optUsu.isPresent()) {
-                    // Autoridad simple basada en nivel (opcional)
-                    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(optUsu.get().getUsuema(), null, authorities);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+            Claims claims = jwtUtil.parseClaims(token);
+            Long usuarioId = claims.get("id", Number.class).longValue();
+            List<String> usuarioRoles = claims.get("roles", List.class);
+
+//           Construir lista de autoridades (roles) a partir de los roles del token
+//           Si la lista de roles es nula, se asigna una lista vacía
+//           si no es nula, se mapea cada rol a una instancia de SimpleGrantedAuthority
+            List<SimpleGrantedAuthority> authorities = (usuarioRoles == null)
+                    ? List.of()
+                    : usuarioRoles.stream()
+                    .map(r -> new SimpleGrantedAuthority("ROLE_" + r.toUpperCase()))
+                    .collect(Collectors.toList());
+
+            Optional<Usu> optUsu = usuRepository.findById(usuarioId.intValue());
+            if (optUsu.isPresent()) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(optUsu.get().getUsuema(), null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
-            // Token inválido/expirado: no autenticamos, dejar que Security maneje 401
             SecurityContextHolder.clearContext();
         }
 

@@ -5,6 +5,7 @@ import com.palaspadel.sb_palaspadel.services.PalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ import java.util.List;
  *
  * @version 1.0
  */
+@PreAuthorize("hasRole('ADMIN')") // Solo usuarios con rol ADMIN pueden importar, insertar, editar o eliminar palas
 @RestController
 @RequestMapping("/palas")
 public class PalControler {
@@ -29,10 +31,11 @@ public class PalControler {
         return palService.findAll();
     }
 
-    @PostMapping
+    @PostMapping("/insertar")
     public Pal agregarPala(@RequestBody Pal pala) {
         return palService.agregarPala(pala);
     }
+
 
 
     @PostMapping("/importar")

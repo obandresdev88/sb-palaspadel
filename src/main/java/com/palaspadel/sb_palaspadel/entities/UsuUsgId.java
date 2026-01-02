@@ -8,6 +8,9 @@ import org.hibernate.Hibernate;
 
 import java.util.Objects;
 
+/**
+ * Composite primary key class for the UsuUsg entity.
+ */
 @Getter
 @Setter
 @Embeddable

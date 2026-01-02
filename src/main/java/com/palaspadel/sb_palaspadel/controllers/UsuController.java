@@ -6,6 +6,7 @@ import com.palaspadel.sb_palaspadel.services.UsuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +28,8 @@ public class UsuController {
 
     /**
      * Metodo para listar todos los usuarios llamando al servicio o capa de negocio (impl)
-     * @return
      */
+    @PreAuthorize("hasRole('ADMIN')") // Solo los usuarios con rol ADMIN pueden acceder a este endpoint
     @GetMapping
     public List<Usu> listarUsuarios() {
         return usuService.findAll();

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -42,19 +44,21 @@ public class JwtUtil {
      * Genera un token JWT con los claims proporcionados y la configuración de expiración.
      * @param id
      * @param nivel
+     * @param roles
      * @param stayLogged
      * @return
      */
-    public String generateToken(Long id, String nivel, boolean stayLogged) {
+    public String generateToken(Long id, String nivel, List<String> roles, boolean stayLogged){
         long now = System.currentTimeMillis();
         long expMillis = now + (stayLogged ? longExpirationMillis : shortExpirationMillis);
         Date issuedAt = new Date(now);
         Date expiration = new Date(expMillis);
 
-        Map<String, Object> claims = Map.of(
-                "id", id,
-                "nivel", nivel
-        );
+//      Crear los claims  del token
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", id);
+        claims.put("nivel", nivel);
+        claims.put("roles", roles);
 
         return Jwts.builder()
                 .setClaims(claims)
