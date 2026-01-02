@@ -3,14 +3,14 @@ package com.palaspadel.sb_palaspadel.controllers;
 import com.palaspadel.sb_palaspadel.dto.AutenticacionResponseDto;
 import com.palaspadel.sb_palaspadel.dto.LoginRequestDto;
 import com.palaspadel.sb_palaspadel.dto.RegistroRequestDto;
-import com.palaspadel.sb_palaspadel.entities.Usg;
+
 import com.palaspadel.sb_palaspadel.entities.Usu;
 import com.palaspadel.sb_palaspadel.entities.UsuUsg;
-import com.palaspadel.sb_palaspadel.repositories.UsuRepository;
-import com.palaspadel.sb_palaspadel.repositories.UsuUsgRepository;
+
 import com.palaspadel.sb_palaspadel.security.JwtUtil;
 import com.palaspadel.sb_palaspadel.services.UsuService;
 import com.palaspadel.sb_palaspadel.services.UsuUsgService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +33,13 @@ public class AutenticacionController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/registro")
-    public ResponseEntity<AutenticacionResponseDto> registrar(@RequestBody RegistroRequestDto request) {
+    public ResponseEntity<AutenticacionResponseDto> registrar(@Valid @RequestBody RegistroRequestDto request) {
         AutenticacionResponseDto response = usuService.registrar(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto request) {
+    public ResponseEntity<?> login(@Valid  @RequestBody LoginRequestDto request) {
         Optional<Usu> optUsu = usuService.obtenerUsuarioPorEmail(request.getUsuema());
         // Verificar si el email existe en la base de datos
         if (optUsu.isEmpty()) {
