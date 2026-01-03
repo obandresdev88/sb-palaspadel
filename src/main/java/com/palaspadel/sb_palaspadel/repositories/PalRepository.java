@@ -19,4 +19,6 @@ public interface PalRepository extends JpaRepository<Pal, Integer> {
                                @Param("palfor") Pal.FormaPala palfor,
                                @Param("paldur") Pal.DurezaPala paldur,
                                @Param("palpre") BigDecimal palpre);
+
+    List<Pal> findPalByPalactIs(Boolean palact);
 }

@@ -28,5 +28,5 @@ public class PalaResponseDto {
     private String urlCompra;
     private String imagen;
     private Boolean activo;
-    private Instant createdAt;
+//    private Instant createdAt;
 }
