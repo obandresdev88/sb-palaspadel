@@ -73,6 +73,7 @@ public class PalService {
                 }
 
                 pala.setPalurl(row.getCell(7) != null ? row.getCell(7).getStringCellValue().trim() : ""); // Manejar URL vacía
+                pala.setPalimg(row.getCell(8) != null ? row.getCell(8).getStringCellValue() : ""); // Imagen
 
                 palasImportadas.add(pala);
             }
