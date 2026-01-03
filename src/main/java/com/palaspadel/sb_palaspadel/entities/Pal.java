@@ -1,8 +1,11 @@
 package com.palaspadel.sb_palaspadel.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
@@ -42,6 +45,12 @@ public class Pal {
 
     @Column(name = "palurl", nullable = false)
     private String palurl = "";
+
+    @Size(max = 255)
+    @NotNull
+    @ColumnDefault("''")
+    @Column(name = "palimg", nullable = false)
+    private String palimg;
 
     @PrePersist
     protected void prePersist() {
