@@ -24,23 +24,29 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PalaCrearDto {
-    @NotBlank (message = "Marca es obligatoria")
+    @NotBlank (message = "Marca es obligatoria y no puede estar vacía")
     @Size(max = 50)
     private String marca;
 
-    @NotBlank (message = "Modelo es obligatorio")
+    @NotBlank (message = "Modelo es obligatorio y no puede estar vacío")
     @Size(max = 75)
     private String modelo;
 
+    @NotNull (message = "Peso es obligatorio")
     private Integer peso;
+
+    @NotNull (message = "Forma es obligatoria")
     private Pal.FormaPala forma;
+    @NotNull (message = "Dureza es obligatoria")
     private Pal.DurezaPala dureza;
+    @NotNull(message = "Balance es obligatorio")
     private Pal.BalancePala balance;
 
     @NotNull(message = "Precio es obligatorio")
     @DecimalMin("0.0")
     private BigDecimal precio;
 
+    @NotNull (message = "URL de compra es obligatoria")
     private String urlCompra;
 
 
