@@ -52,6 +52,11 @@ public class Pal {
     @Column(name = "palimg", nullable = false)
     private String palimg;
 
+    @NotNull
+    @ColumnDefault("1")
+    @Column(name = "palact", nullable = false)
+    private Boolean palact;
+
     @PrePersist
     protected void prePersist() {
         if (palpre == null) {
