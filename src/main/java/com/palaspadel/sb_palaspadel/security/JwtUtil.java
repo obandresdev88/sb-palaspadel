@@ -27,8 +27,8 @@ public class JwtUtil {
 
     public JwtUtil(
             @Value("${spring.jwt.secret}") String base64Secret,
-            @Value("${spring.jwt.expiration.short}") long shortExpirationSeconds,
-            @Value("${spring.jwt.expiration.long}") long longExpirationSeconds
+            @Value("${spring.jwt.expiration.short}") long shortExpirationSeconds, // 30 minutos
+            @Value("${spring.jwt.expiration.long}") long longExpirationSeconds // 7 días
     ) {
         byte[] keyBytes = Decoders.BASE64.decode(base64Secret);
         try {

@@ -85,6 +85,7 @@ public class UsuServiceImpl implements UsuService {
         return new AutenticacionResponseDto(
                 token,
                 usuarioGuardado.getUsuema(),
+                usuarioGuardado.getUsunom(),
                 usuarioGuardado.getId()
         );
     }

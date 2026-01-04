@@ -8,5 +8,6 @@ import lombok.Getter;
 public class AutenticacionResponseDto {
     private final String token;
     private final String usuema;
+    private final String usunom;
     private final Integer usuid;
 }

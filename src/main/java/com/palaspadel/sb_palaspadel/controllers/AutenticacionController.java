@@ -62,7 +62,7 @@ public class AutenticacionController {
                 request.isPermaneceLogged()
         );
 
-        AutenticacionResponseDto resp = new AutenticacionResponseDto(token, usu.getUsuema(), usu.getId());
+        AutenticacionResponseDto resp = new AutenticacionResponseDto(token, usu.getUsuema(), usu.getUsunom(),usu.getId());
         return ResponseEntity.ok(resp);
     }
 }
