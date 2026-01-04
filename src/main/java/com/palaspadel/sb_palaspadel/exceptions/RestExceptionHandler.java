@@ -1,5 +1,5 @@
 
-package com.palaspadel.sb_palaspadel.security;
+package com.palaspadel.sb_palaspadel.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
