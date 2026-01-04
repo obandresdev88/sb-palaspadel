@@ -28,6 +28,9 @@ public class UsuController {
 
     /**
      * Metodo para listar todos los usuarios llamando al servicio o capa de negocio (impl)
+     * Si no tiene el rol ADMIN, no puede acceder a este endpoint, dará un error 403 Forbidden con el mensaje "Access is denied"
+     *
+     * @return Lista de usuarios
      */
     @PreAuthorize("hasRole('ADMIN')") // Solo los usuarios con rol ADMIN pueden acceder a este endpoint
     @GetMapping
