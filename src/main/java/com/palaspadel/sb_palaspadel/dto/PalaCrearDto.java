@@ -49,7 +49,5 @@ public class PalaCrearDto {
     @NotNull (message = "URL de compra es obligatoria")
     private String urlCompra;
 
-
-//     Imagen de la pala lo harmemos mediante el endpoint de subida de imagenes
 //    private String imagen;
 }
