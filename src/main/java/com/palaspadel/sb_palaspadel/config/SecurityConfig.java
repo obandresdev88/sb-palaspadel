@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/palas/**", "/images/**").permitAll()
                         .requestMatchers(
                                 "/api/auth/**",
+                                "/api/recomendador",
                                 "/actuator/health",
                                 "/error"
                         ).permitAll()
@@ -70,6 +71,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Define el punto de entrada para solicitudes no autorizadas. Da una respuesta 401 con un mensaje JSON.
+     *
+     * @return AuthenticationEntryPoint que maneja respuestas no autorizadas
+     */
     @Bean
     public AuthenticationEntryPoint unauthorizedEntryPoint() {
         return (request, response, authException) -> {
