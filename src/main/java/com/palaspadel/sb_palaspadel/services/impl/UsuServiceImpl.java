@@ -86,7 +86,8 @@ public class UsuServiceImpl implements UsuService {
                 token,
                 usuarioGuardado.getUsuema(),
                 usuarioGuardado.getUsunom(),
-                usuarioGuardado.getId()
+                usuarioGuardado.getId(),
+                List.of("USER")
         );
     }
 
