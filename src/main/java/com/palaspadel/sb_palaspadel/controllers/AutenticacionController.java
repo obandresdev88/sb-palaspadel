@@ -52,17 +52,18 @@ public class AutenticacionController {
         }
         // Ver que rol o permisos tiene el usuario para incluirlo en el token JWT
         List<UsuUsg> usuUsgs  = usuUsgService.obtenerRolesPorUsuario(usu);
+        List <String> roles = usuUsgs.stream()
+                .map(uu -> uu.getPermiso().getUsgnom())
+                .toList();
 
         String token = jwtUtil.generateToken(
                 usu.getId().longValue(),
                 usu.getUsuniv() != null ? usu.getUsuniv().name() : "INTERMEDIO",
-                usuUsgs.stream()
-                        .map(uu -> uu.getPermiso().getUsgnom())
-                        .toList(),
+                roles,
                 request.isPermaneceLogged()
         );
 
-        AutenticacionResponseDto resp = new AutenticacionResponseDto(token, usu.getUsuema(), usu.getUsunom(),usu.getId());
+        AutenticacionResponseDto resp = new AutenticacionResponseDto(token, usu.getUsuema(), usu.getUsunom(),usu.getId(), roles);
         return ResponseEntity.ok(resp);
     }
 }
