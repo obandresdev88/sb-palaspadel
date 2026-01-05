@@ -54,6 +54,6 @@ public class PalaActualizarDto {
 //    Imagen de la pala lo harmemos mediante el endpoint de subida de imagenes
 //    private String imagen;
 
-    @NotNull
-    private Boolean activo;
+//    @NotNull
+//    private Boolean activo;
 }

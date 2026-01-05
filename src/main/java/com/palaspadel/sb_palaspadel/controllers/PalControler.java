@@ -57,7 +57,7 @@ public class PalControler {
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<PalaResponseDto> crearPala(
             @Valid @ModelAttribute PalaCrearDto dto,
-            @RequestParam(value = "imagen", required = false) MultipartFile imagen) {
+            @RequestParam(value = "imagen", required = true) MultipartFile imagen) {
         PalaResponseDto palaCreada = palService.crearPala(dto, imagen);
         return ResponseEntity.status(HttpStatus.CREATED).body(palaCreada);
     }
@@ -89,7 +89,7 @@ public class PalControler {
      * Importar palas desde Excel
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/importar-excel")
+    @PostMapping("/insertar-masiva")
     public ResponseEntity<String> importarPalas(@RequestParam("archivo") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Por favor, sube un archivo válido.");

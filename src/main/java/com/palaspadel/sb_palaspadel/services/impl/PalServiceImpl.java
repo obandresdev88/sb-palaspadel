@@ -75,6 +75,8 @@ public class PalServiceImpl implements PalService {
         pala.setPalpre(dto.getPrecio());
         pala.setPalurl(dto.getUrlCompra());
         pala.setPalact(true);
+        pala.setPalimg("/images/default.webp"); // si no viene pondremos una imagen por defecto
+
 
         // Guardar primero para obtener el ID
         Pal palaGuardada = palRepository.save(pala);
@@ -110,7 +112,7 @@ public class PalServiceImpl implements PalService {
         pala.setPalbal(dto.getBalance());
         pala.setPalpre(dto.getPrecio());
         pala.setPalurl(dto.getUrlCompra());
-        pala.setPalact(dto.getActivo());
+//        pala.setPalact(dto.getActivo());
 
         // Actualizar imagen si se proporciona
         if (imagen != null && !imagen.isEmpty()) {
@@ -219,7 +221,6 @@ public class PalServiceImpl implements PalService {
             String nombreOriginal = archivo.getOriginalFilename();
             String extension = nombreOriginal.substring(nombreOriginal.lastIndexOf(".")).toLowerCase();
 
-            // Limpiar marca y modelo para nombre de archivo seguro
             String marcaLimpia = marca.replaceAll("[^a-zA-Z0-9]", "_");
             String modeloLimpio = modelo.replaceAll("[^a-zA-Z0-9]", "_");
             String nombreImagen = id + "_" + marcaLimpia + "_" + modeloLimpio + extension;
@@ -228,7 +229,7 @@ public class PalServiceImpl implements PalService {
             Files.write(rutaArchivo, archivo.getBytes());
 
             log.info("Imagen guardada: {}", nombreImagen);
-            return nombreImagen;
+            return nombreImagen; // guardar solo el nombre en la entidad/BD
         } catch (IOException e) {
             log.error("Error al guardar imagen: {}", e.getMessage(), e);
             throw new RuntimeException("Error al guardar imagen: " + e.getMessage(), e);
@@ -240,13 +241,22 @@ public class PalServiceImpl implements PalService {
      */
     private void eliminarImagen(String nombreImagen) {
         try {
-            Path rutaArchivo = Paths.get(uploadDir).resolve(nombreImagen);
+            if (nombreImagen == null || nombreImagen.isEmpty()) return;
+            // Si viene con prefijo /images/ lo eliminamos
+            String nombre = nombreImagen;
+            if (nombre.startsWith("/images/")) {
+                nombre = nombre.substring("/images/".length());
+            } else if (nombre.startsWith("images/")) {
+                nombre = nombre.substring("images/".length());
+            }
+            Path rutaArchivo = Paths.get(uploadDir).resolve(nombre);
             Files.deleteIfExists(rutaArchivo);
-            log.info("Imagen eliminada: {}", nombreImagen);
+            log.info("Imagen eliminada: {}", nombre);
         } catch (IOException e) {
             log.warn("Error al eliminar imagen {}: {}", nombreImagen, e.getMessage());
         }
     }
+
 
     private <E extends Enum<E>> E validarEnum(Cell cell, Class<E> enumType, E defaultValue) {
         if (cell == null || cell.getCellType() != CellType.STRING || cell.getStringCellValue().trim().isEmpty()) {
@@ -271,7 +281,15 @@ public class PalServiceImpl implements PalService {
         dto.setBalance(pala.getPalbal());
         dto.setPrecio(pala.getPalpre());
         dto.setUrlCompra(pala.getPalurl());
-        dto.setImagen(pala.getPalimg());
+        // Construir URL pública de la imagen
+        String img = pala.getPalimg();
+        if (img == null || img.trim().isEmpty()) {
+            dto.setImagen("/images/default.webp");
+        } else if (img.startsWith("http") || img.startsWith("/images/")) {
+            dto.setImagen(img);
+        } else {
+            dto.setImagen("/images/" + img);
+        }
         dto.setActivo(pala.getPalact());
         // dto.setCreatedAt(pala.getCreatedAt()); // Descomentado cuando agregues el campo al DTO
         return dto;
