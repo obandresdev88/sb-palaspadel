@@ -4,6 +4,7 @@ import com.palaspadel.sb_palaspadel.repositories.UsuRepository;
 import com.palaspadel.sb_palaspadel.security.JwtAuthenticationFilter;
 import com.palaspadel.sb_palaspadel.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -35,25 +36,21 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final UsuRepository usuRepository;
 
+    @Value("${frontend.url:https://obandresdev88.github.io/bs-palaspadel}")
+    private String frontendUrl;
+
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtUtil, usuRepository);
     }
 
-    /**
-     * Configura la cadena de filtros de seguridad para la aplicación.
-     *
-     * @param http objeto HttpSecurity para configuración
-     * @return SecurityFilterChain configurada
-     * @throws Exception si hay error en la configuración
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(Arrays.asList(
-                            "https://obandresdev88.github.io",
+                            frontendUrl,
                             "http://localhost:5500"
                     ));
                     config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -79,17 +76,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Define el punto de entrada para solicitudes no autorizadas. Da una respuesta 401 con un mensaje JSON.
-     *
-     * @return AuthenticationEntryPoint que maneja respuestas no autorizadas
-     */
     @Bean
     public AuthenticationEntryPoint unauthorizedEntryPoint() {
         return (request, response, authException) -> {
