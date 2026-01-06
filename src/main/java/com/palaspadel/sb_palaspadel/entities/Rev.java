@@ -14,16 +14,19 @@ import java.time.Instant;
         @UniqueConstraint(columnNames = {"revusu", "revpal"}) // Un usuario solo puede reseñar una pala una vez
 })
 public class Rev {
-    @EmbeddedId
-    private RevId id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "revid", nullable = false)
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("revusu") // Mapea este campo con la clave compuesta
+//    @MapsId("revusu") // Mapea este campo con la clave compuesta
     @JoinColumn(name = "revusu", nullable = false)
     private Usu revusu;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("revpal") // Mapea este campo con la clave compuesta
+//    @MapsId("revpal") // Mapea este campo con la clave compuesta
     @JoinColumn(name = "revpal", nullable = false)
     private Pal revpal;
 

@@ -11,12 +11,29 @@ import java.util.Optional;
 
 public interface PalRepository extends JpaRepository<Pal, Integer> {
 
+    List<Pal> findByPalpesBetween(Integer minPeso, Integer maxPeso);
+    List<Pal> findByPalpreLessThanEqual(java.math.BigDecimal precio);
+    List<Pal> findByPalactTrue();
+    List<Pal> findByPalfor(Pal.FormaPala forma);
+
+    /**
+     * Buscar pala por marca y modelo
+     * se utiliza para evitar duplicados
+     *
+     * @param palmar
+     * @param palmod
+     * @return
+     */
     Optional<Pal> findByPalmarAndPalmod(String palmar, String palmod);
 
 
-    @Query("SELECT p FROM Pal p WHERE p.palbal = :palbal AND p.palfor = :palfor AND p.paldur = :paldur AND p.palpre <= :palpre")
-    List<Pal> findMatchingPals(@Param("palbal") Pal.BalancePala palbal,
-                               @Param("palfor") Pal.FormaPala palfor,
-                               @Param("paldur") Pal.DurezaPala paldur,
-                               @Param("palpre") BigDecimal palpre);
+
+    /**
+     * Listar palas por su estado activo/inactivo
+     * se utiliza para mostrar palas activas en el catálogo
+     *
+     * @param palact
+     * @return
+     */
+    List<Pal> findPalByPalactIs(Boolean palact);
 }

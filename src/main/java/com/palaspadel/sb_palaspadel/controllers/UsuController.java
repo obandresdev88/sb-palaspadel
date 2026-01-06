@@ -6,6 +6,7 @@ import com.palaspadel.sb_palaspadel.services.UsuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("api/usuarios")
 public class UsuController {
 
     @Autowired
@@ -27,26 +28,15 @@ public class UsuController {
 
     /**
      * Metodo para listar todos los usuarios llamando al servicio o capa de negocio (impl)
-     * @return
+     * Si no tiene el rol ADMIN, no puede acceder a este endpoint, dará un error 403 Forbidden con el mensaje "Access is denied"
+     *
+     * @return Lista de usuarios
      */
+    @PreAuthorize("hasRole('ADMIN')") // Solo los usuarios con rol ADMIN pueden acceder a este endpoint
     @GetMapping
     public List<Usu> listarUsuarios() {
         return usuService.findAll();
     }
 
-    /**
-     * Metodo para crear un usuario llamando al servicio o capa de negocio (impl)
-     *
-     * @param usu
-     * @return
-     */
-    @CrossOrigin(origins = "http://127.0.0.1:5500") // Para permitir peticiones desde cualquier origen
-    @PostMapping("/registro")
-    public ResponseEntity<Usu> crearUsuario( @RequestBody Usu usu) { // Se pone body porque no vendrá por path variable, se rellena en el formulario
-        Usu usuSaved  = usuService.save(usu);
-        if (usuSaved == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuSaved);
-    }
+
 }
