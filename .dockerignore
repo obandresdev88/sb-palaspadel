@@ -1,0 +1,12 @@
+# Dockerignore para optimizar el build
+target/
+.git/
+.gitignore
+README.md
+*.md
+.mvn/
+mvnw
+mvnw.cmd
+.idea/
+.vscode/
+*.iml
