@@ -19,7 +19,7 @@ public class Usu {
     @Column(name = "usunom", nullable = false, length = 75)
     private String usunom;
 
-    @Column(name = "usuema", nullable = false, unique = true)
+    @Column(name = "usuema", length = 191, nullable = false, unique = true)
     private String usuema;
 
     @Column(name = "usupas", nullable = false)
