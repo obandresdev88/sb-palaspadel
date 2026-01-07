@@ -15,9 +15,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String location = "file:" + uploadDir.replace("\\", "/") + "/";
         registry.addResourceHandler("/images/**")
-                .addResourceLocations(location);
+                .addResourceLocations("classpath:/images/");
     }
 
     @Value("${frontend.url:https://obandresdev88.github.io}")

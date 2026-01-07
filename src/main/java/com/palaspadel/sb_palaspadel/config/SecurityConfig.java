@@ -63,9 +63,10 @@ public class SecurityConfig {
                 .exceptionHandling(eh -> eh.authenticationEntryPoint(unauthorizedEntryPoint()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/palas/**", "/images/**").permitAll()
+                        .requestMatchers("/favicon.ico").permitAll()  // AGREGAR ESTO
+                        .requestMatchers(HttpMethod.POST, "/api/recomendador").permitAll()  // AGREGAR ESTO
                         .requestMatchers(
                                 "/api/auth/**",
-                                "/api/recomendador",
                                 "/actuator/health",
                                 "/error"
                         ).permitAll()
