@@ -15,8 +15,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("classpath:/images/");
+        // Servir imágenes desde el sistema de ficheros (ruta configurada en app.upload.dir)
+        // y como fallback desde classpath:/images/ (recursos empaquetados)
+        try {
+            String fsPath = java.nio.file.Paths.get(uploadDir).toAbsolutePath().toString();
+            if (!fsPath.endsWith(java.io.File.separator)) {
+                fsPath = fsPath + java.io.File.separator;
+            }
+            registry.addResourceHandler("/images/**")
+                    .addResourceLocations("file:" + fsPath, "classpath:/images/");
+        } catch (Exception e) {
+            registry.addResourceHandler("/images/**")
+                    .addResourceLocations("classpath:/images/");
+        }
     }
 
     @Value("${frontend.url:https://obandresdev88.github.io}")
