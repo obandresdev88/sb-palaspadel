@@ -52,6 +52,12 @@ La aplicación estará disponible en: `http://localhost:8080`
 - **Recomendación de palas** según nivel y estilo de juego
 - **Gestor de reseñas** para valorar y comentar sobre las palas
 
+## Aplicación Móvil
+
+Descarga la aplicación móvil Android:
+
+[Descargar APK](https://github.com/mostafaalagamy/Metrolist/releases/latest/download/app-armeabi-release.apk)
+
 ## Estructura del proyecto
 
 ```
